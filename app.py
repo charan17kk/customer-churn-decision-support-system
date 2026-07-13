@@ -865,14 +865,11 @@ if predict:
     shap_df["Feature"] = shap_df["Feature"].replace(feature_mapping)
 
     top10 = shap_df.head(10)
-
     st.markdown(
         '<div class="section-eyebrow" style="margin-top:1.8rem;"><span class="section-eyebrow-icon">📝</span>Executive Summary</div>',
         unsafe_allow_html=True
     )
 
-    top_positive = top10[top10["SHAP Value"] > 0]["Feature"].head(3).tolist()
-    top_negative = top10[top10["SHAP Value"] < 0]["Feature"].head(3).tolist()
 
     # NOTE: using a real st.container(border=True) here (instead of a raw
     # markdown <div> spanning multiple st calls) is what fixes the empty
@@ -883,56 +880,112 @@ if predict:
 
         if prediction == "Yes":
 
-            st.markdown(
-                f"""
-                Based on the customer's profile, the model predicts that this customer is **likely to churn**.
+            churn_reasons = []
 
-                ### Primary factors increasing churn risk
-                • {top_positive[0] if len(top_positive) > 0 else "N/A"}
-
-                • {top_positive[1] if len(top_positive) > 1 else "N/A"}
-
-                • {top_positive[2] if len(top_positive) > 2 else "N/A"}
-
-                ### Factors helping retain this customer
-                • {top_negative[0] if len(top_negative) > 0 else "N/A"}
-
-                • {top_negative[1] if len(top_negative) > 1 else "N/A"}
-
-                • {top_negative[2] if len(top_negative) > 2 else "N/A"}
-
-                **Business Insight**
-
-                Although several customer characteristics support retention, the overall churn risk remains elevated. Targeted retention initiatives should focus on the factors contributing most to the customer's likelihood of leaving.
-                """
+            if contract == "Month-to-month":
+                churn_reasons.append(
+                    "• The customer is on a Month-to-Month contract, which is associated with a higher likelihood of churn."
                 )
+
+            if tenure < 12:
+                churn_reasons.append(
+                    "• The customer has been with the company for a relatively short period."
+                )
+
+            if monthly_charges >= 80:
+                churn_reasons.append(
+                    "• The customer's monthly charges are relatively high."
+                )
+
+            if tech_support == "No":
+                churn_reasons.append(
+                    "• The customer does not subscribe to Technical Support."
+                )
+
+            if online_security == "No":
+                churn_reasons.append(
+                    "• The customer does not have Online Security services."
+                )
+
+            if internet_service == "Fiber optic":
+                churn_reasons.append(
+                    "• The customer uses Fiber Optic internet service."
+                )
+
+            if len(churn_reasons) == 0:
+                churn_reasons.append(
+                    "• Multiple customer characteristics contributed to this prediction."
+                )
+
+            churn_reasons_text = "\n\n".join(churn_reasons)
+
+            st.markdown(f"""### Business Summary
+
+Based on the customer's profile, this customer is **likely to churn**.
+
+### Primary factors influencing this assessment
+
+{churn_reasons_text}
+
+### Business Insight
+
+Proactive retention efforts such as personalized offers and service improvements are recommended to reduce the likelihood of churn.
+""")
 
         else:
 
-            st.markdown(
-            f"""
-            Based on the customer's profile, the model predicts that this customer is **likely to remain with the company**.
+            retention_reasons = []
 
-            ### Primary factors supporting retention
-            • {top_negative[0] if len(top_negative) > 0 else "N/A"}
+            if contract == "Two year":
+                retention_reasons.append(
+                    "• The customer has a Two-Year contract, which strongly supports long-term retention."
+                )
 
-            • {top_negative[1] if len(top_negative) > 1 else "N/A"}
+            elif contract == "One year":
+                retention_reasons.append(
+                    "• The customer has a One-Year contract, reducing churn risk."
+                )
 
-            • {top_negative[2] if len(top_negative) > 2 else "N/A"}
+            if tenure >= 24:
+                retention_reasons.append(
+                    "• The customer has maintained a long relationship with the company."
+                )
 
-            ### Factors that still increase churn risk
-            • {top_positive[0] if len(top_positive) > 0 else "N/A"}
+            if tech_support == "Yes":
+                retention_reasons.append(
+                    "• The customer benefits from Technical Support services."
+                )
 
-            • {top_positive[1] if len(top_positive) > 1 else "N/A"}
+            if online_security == "Yes":
+                retention_reasons.append(
+                    "• The customer has Online Security services."
+                )
 
-            • {top_positive[2] if len(top_positive) > 2 else "N/A"}
+            if monthly_charges < 80:
+                retention_reasons.append(
+                    "• Monthly charges are within a moderate range."
+                )
 
-            **Business Insight**
+            if len(retention_reasons) == 0:
+                retention_reasons.append(
+                    "• Overall customer characteristics indicate a stable customer relationship."
+                )
 
-            The customer currently shows a strong likelihood of remaining with the company. Maintaining service quality and customer satisfaction should help preserve this positive outlook.
-            """
-            )
+            retention_reasons_text = "\n\n".join(retention_reasons)
 
+            st.markdown(f"""### Business Summary
+
+Based on the customer's profile, this customer is **likely to remain with the company**.
+
+### Primary factors supporting retention
+
+{retention_reasons_text}
+
+### Business Insight
+
+The customer's overall profile indicates a healthy long-term relationship. Continuing to deliver consistent service quality should help maintain customer retention.
+""")
+            
     st.markdown(
         '<div class="section-eyebrow" style="margin-top:1.8rem;"><span class="section-eyebrow-icon">🔍</span>Key Factors Behind This Assessment</div>',
         unsafe_allow_html=True
