@@ -343,17 +343,21 @@ This transforms raw model predictions into actionable business intelligence.
 
 ---
 
-# 📈 Model Performance
+# 📊 Model Performance
 
 The final production model was selected after evaluating multiple machine learning algorithms using business-relevant performance metrics.
 
-| Metric | Value |
-|---------|------:|
-| Accuracy | *(Add Your Score)* |
-| Precision | *(Add Your Score)* |
-| Recall | *(Add Your Score)* |
-| F1 Score | *(Add Your Score)* |
-| ROC-AUC | *(Add Your Score)* |
+| Metric | Score |
+|:--------|------:|
+| **Accuracy** | **78.18%** |
+| **Precision** | **57.85%** |
+| **Recall** | **66.04%** |
+| **F1 Score** | **61.67%** |
+| **ROC-AUC** | **83.27%** |
+
+> **Note**
+>
+> The deployed application uses a tuned probability threshold of **0.65** instead of the default **0.50** to better align predictions with business decision-making. This prioritizes identifying customers at genuine churn risk while reducing unnecessary retention actions.
 
 > **Note:** The deployed application uses a tuned probability threshold to better align predictions with business decision-making requirements rather than relying solely on the default classification threshold.
 
