@@ -358,9 +358,6 @@ The final production model was selected after evaluating multiple machine learni
 > **Note**
 >
 > The deployed application uses a tuned probability threshold of **0.65** instead of the default **0.50** to better align predictions with business decision-making. This prioritizes identifying customers at genuine churn risk while reducing unnecessary retention actions.
-
-> **Note:** The deployed application uses a tuned probability threshold to better align predictions with business decision-making requirements rather than relying solely on the default classification threshold.
-
 ---
 
 # 💡 Explainability Strategy
