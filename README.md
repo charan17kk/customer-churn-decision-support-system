@@ -556,8 +556,6 @@ Aspiring Data Scientist passionate about building intelligent systems that combi
 
 If you found this project helpful or enjoyed exploring it, consider giving the repository a **Star ⭐**.
 
-Your support helps increase the project's visibility and motivates future open-source development.
-
 ---
 
 <p align="center">
